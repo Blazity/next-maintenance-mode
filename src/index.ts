@@ -17,7 +17,7 @@ const MaintenanceModeOptions = z.object({
 })
 
 const MaintenanceModeConfig = z.object({
-  middleware: z.any(),
+  middleware: z.function(),
   connectionString: z.string().url(),
   options: MaintenanceModeOptions,
 })
