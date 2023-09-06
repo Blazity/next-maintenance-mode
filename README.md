@@ -32,5 +32,5 @@ You can configure the middleware using the following options:
 ### Connection Strings
 The format for the connection string varies between Upstash and Edge Config:
 
-- For Upstash: The connection string should include the URL and token (format: protocol://url@token).
+- For Upstash: The connection string should include the URL and token (format: url@token).
 - For Edge Config: The connection string should be the API endpoint or path provided by Edge Config.
