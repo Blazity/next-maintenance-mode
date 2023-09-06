@@ -58,6 +58,9 @@ const handleMaintenanceMode = async (
   options: MiddlewareFactoryOptions,
   req: NextRequest,
 ): Promise<NextMiddlewareResult> => {
+  if (isInMaintenanceMode === null || isInMaintenanceMode === undefined) {
+    throw new Error('Maintenance mode key is null or undefined')
+  }
   const maintenancePageSlug = options?.maintenancePageSlug || '/maintenance'
   if (isInMaintenanceMode) {
     req.nextUrl.pathname = maintenancePageSlug
@@ -79,10 +82,6 @@ const withUpstash = async ({
     const redis = new Redis({ url: url, token: token })
 
     const isInMaintenanceMode = await redis.get<boolean>(options?.key || 'isInMaintenanceMode')
-
-    // if (isInMaintenanceMode === null) {
-    //   await redis.set(options?.key || 'isInMaintenanceMode', 'false')
-    // }
 
     if (isInMaintenanceMode) {
       return handleMaintenanceMode(isInMaintenanceMode, options, req)
