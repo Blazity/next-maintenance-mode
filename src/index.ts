@@ -5,6 +5,8 @@ import { createClient } from '@vercel/edge-config'
 import { NextMiddlewareResult } from 'next/dist/server/web/types'
 import { z } from 'zod'
 
+const MAINTENANCE_KEY_MISSING = 'Maintenance mode key is not set'
+
 type Provider = 'upstash' | 'edge-config'
 
 const MaintenanceModeOptions = z.object({
@@ -58,9 +60,6 @@ const handleMaintenanceMode = async (
   options: MiddlewareFactoryOptions,
   req: NextRequest,
 ): Promise<NextMiddlewareResult> => {
-  if (isInMaintenanceMode === null || isInMaintenanceMode === undefined) {
-    throw new Error('Maintenance mode key is null or undefined')
-  }
   const maintenancePageSlug = options?.maintenancePageSlug || '/maintenance'
   if (isInMaintenanceMode) {
     req.nextUrl.pathname = maintenancePageSlug
@@ -81,7 +80,11 @@ const withUpstash = async ({
     const url = protocolAndUrl
     const redis = new Redis({ url: url, token: token })
 
-    const isInMaintenanceMode = await redis.get<boolean>(options?.key || 'isInMaintenanceMode')
+    const isInMaintenanceMode = await redis.get<boolean | null>(options?.key || 'isInMaintenanceMode')
+
+    if (isInMaintenanceMode === null) {
+      throw new Error(MAINTENANCE_KEY_MISSING)
+    }
 
     if (isInMaintenanceMode) {
       return handleMaintenanceMode(isInMaintenanceMode, options, req)
@@ -102,7 +105,11 @@ const withEdgeConfig = async ({
 }: MiddlewareHelperArgs): Promise<NextMiddlewareResult> => {
   try {
     const edgeConfig = createClient(connectionString)
-    const isInMaintenanceMode = await edgeConfig.get<boolean>(options?.key || 'isInMaintenanceMode')
+    const isInMaintenanceMode = await edgeConfig.get<boolean | undefined>(options?.key || 'isInMaintenanceMode')
+
+    if (isInMaintenanceMode === undefined) {
+      throw new Error(MAINTENANCE_KEY_MISSING)
+    }
 
     if (isInMaintenanceMode) {
       return handleMaintenanceMode(isInMaintenanceMode, options, req)
