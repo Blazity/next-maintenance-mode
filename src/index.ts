@@ -3,11 +3,24 @@ import { NextMiddleware } from 'next/server'
 import { Redis } from '@upstash/redis'
 import { createClient } from '@vercel/edge-config'
 import { NextMiddlewareResult } from 'next/dist/server/web/types'
+import { z } from 'zod'
 
 enum Provider {
   UPSTASH = 'upstash',
   EDGE_CONFIG = 'edge-config',
 }
+
+const MaintenanceModeOptions = z.object({
+  provider: z.enum([Provider.UPSTASH, Provider.EDGE_CONFIG]),
+  maintenancePageSlug: z.string().optional(),
+  key: z.string().optional(),
+})
+
+const MaintenanceModeConfig = z.object({
+  middleware: z.any(),
+  connectionString: z.string().url(),
+  options: MaintenanceModeOptions,
+})
 
 type MiddlewareFactoryOptions = Readonly<{
   provider: Provider
@@ -22,6 +35,26 @@ type MiddlewareHelperArgs = Readonly<{
   connectionString: string
   options: MiddlewareFactoryOptions
 }>
+
+const validateConfig = (
+  middleware: NextMiddleware,
+  connectionString: string,
+  options: Readonly<MiddlewareFactoryOptions>,
+) => {
+  try {
+    MaintenanceModeConfig.parse({ middleware, connectionString, options })
+
+    if (options.provider === 'upstash' && !connectionString.includes('upstash')) {
+      throw new Error("Invalid connection string for provider 'upstash'")
+    }
+
+    if (options.provider === 'edge-config' && !connectionString.includes('edge-config')) {
+      throw new Error("Invalid connection string for provider 'edge-config'")
+    }
+  } catch (e) {
+    if (e instanceof z.ZodError) throw new Error(e.errors ? e.errors[0].message : e.message)
+  }
+}
 
 const handleMaintenanceMode = async (
   isInMaintenanceMode: boolean | null,
@@ -91,6 +124,7 @@ export const withMaintenanceMode = (
   options: MiddlewareFactoryOptions,
 ) => {
   return async (req: NextRequest, _next: NextFetchEvent): Promise<NextMiddlewareResult> => {
+    validateConfig(middleware, connectionString, options)
     const provider = options?.provider
     if (!connectionString) {
       throw new Error('Connection string is required')
