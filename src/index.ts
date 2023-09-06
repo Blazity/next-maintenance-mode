@@ -51,7 +51,9 @@ const validateConfig = (
       throw new Error("Invalid connection string for provider 'edge-config'")
     }
   } catch (e) {
-    if (e instanceof z.ZodError) throw new Error(e.errors ? e.errors[0].message : e.message)
+    if (e instanceof z.ZodError) {
+      throw new Error(e.errors ? e.errors[0].message : e.message)
+    } else throw e
   }
 }
 
@@ -155,4 +157,4 @@ export const withMaintenanceMode = (
   }
 }
 
-module.exports = withMaintenanceMode
+export default withMaintenanceMode
