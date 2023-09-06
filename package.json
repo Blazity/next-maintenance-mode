@@ -1,0 +1,31 @@
+{
+  "name": "next-maintenance-mode",
+  "version": "1.0.0",
+  "description": "",
+  "source": "src/index.ts",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "author": "woywro",
+  "license": "MIT",
+  "files": [
+    "lib/**/*"
+  ],
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@upstash/redis": "^1.22.0",
+    "next": "canary",
+    "react": "latest",
+    "react-dom": "latest",
+    "@vercel/edge-config": "^0.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.45",
+    "@typescript-eslint/eslint-plugin": "^6.6.0",
+    "typescript": "4.5.5"
+  },
+  "peerDependencies": {
+    "@types/react": "^18.0.28"
+  }
+}
