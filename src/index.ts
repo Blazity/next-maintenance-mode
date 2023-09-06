@@ -5,13 +5,10 @@ import { createClient } from '@vercel/edge-config'
 import { NextMiddlewareResult } from 'next/dist/server/web/types'
 import { z } from 'zod'
 
-enum Provider {
-  UPSTASH = 'upstash',
-  EDGE_CONFIG = 'edge-config',
-}
+type Provider = 'upstash' | 'edge-config'
 
 const MaintenanceModeOptions = z.object({
-  provider: z.enum([Provider.UPSTASH, Provider.EDGE_CONFIG]),
+  provider: z.enum(['upstash', 'edge-config']),
   maintenancePageSlug: z.string().optional(),
   key: z.string().optional(),
 })
@@ -142,9 +139,9 @@ export const withMaintenanceMode = (
     }
 
     switch (provider) {
-      case Provider.UPSTASH:
+      case 'upstash':
         return withUpstash(helperArgs)
-      case Provider.EDGE_CONFIG:
+      case 'edge-config':
         return withEdgeConfig(helperArgs)
       default:
         throw new Error(`Unsupported provider: ${provider}`)
