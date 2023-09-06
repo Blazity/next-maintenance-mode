@@ -80,9 +80,9 @@ const withUpstash = async ({
 
     const isInMaintenanceMode = await redis.get<boolean>(options?.key || 'isInMaintenanceMode')
 
-    if (isInMaintenanceMode === null) {
-      await redis.set(options?.key || 'isInMaintenanceMode', 'false')
-    }
+    // if (isInMaintenanceMode === null) {
+    //   await redis.set(options?.key || 'isInMaintenanceMode', 'false')
+    // }
 
     if (isInMaintenanceMode) {
       return handleMaintenanceMode(isInMaintenanceMode, options, req)
@@ -103,7 +103,7 @@ const withEdgeConfig = async ({
 }: MiddlewareHelperArgs): Promise<NextMiddlewareResult> => {
   try {
     const edgeConfig = createClient(connectionString)
-    const isInMaintenanceMode = (await edgeConfig.get<boolean>(options?.key || 'isInMaintenanceMode')) as boolean
+    const isInMaintenanceMode = await edgeConfig.get<boolean>(options?.key || 'isInMaintenanceMode')
 
     if (isInMaintenanceMode) {
       return handleMaintenanceMode(isInMaintenanceMode, options, req)
