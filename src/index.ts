@@ -18,10 +18,23 @@ type MiddlewareFactoryOptions = Readonly<{
 type ProviderMiddleware = Readonly<{
   req: NextRequest
   _next: NextFetchEvent
-  middleware: NextMiddleware
+  middleware: {
+    beforeCheck?: NextMiddleware
+    afterCheck?: NextMiddleware
+  }
   connectionString: string
   options: MiddlewareFactoryOptions
 }>
+
+const MiddlewareConfig = z
+  .object({
+    beforeCheck: z.function().optional(),
+    afterCheck: z.function().optional(),
+  })
+  .refine((data) => data.beforeCheck || data.afterCheck, {
+    message: "At least one of 'beforeCheck' or 'afterCheck' middleware functions must be defined",
+    path: ['middleware'],
+  })
 
 const MaintenanceModeOptions = z.object({
   provider: z.enum(['upstash', 'edge-config']),
@@ -31,7 +44,7 @@ const MaintenanceModeOptions = z.object({
 
 const MaintenanceModeConfig = z
   .object({
-    middleware: z.function(),
+    middleware: MiddlewareConfig,
     connectionString: z.string(),
     options: MaintenanceModeOptions.required(),
   })
@@ -60,7 +73,6 @@ const handleMaintenanceMode = async (
   }
   return NextResponse.next()
 }
-
 const getIsInMaintenanceMode = async (
   provider: Provider,
   connectionString: string,
@@ -90,26 +102,43 @@ const getIsInMaintenanceMode = async (
 
 const providerMiddleware = async ({ req, _next, middleware, connectionString, options }: ProviderMiddleware) => {
   try {
+    if (middleware.beforeCheck) {
+      const beforeCheckResult = await middleware.beforeCheck(req, _next)
+      if (beforeCheckResult) return beforeCheckResult
+    }
+
     const isInMaintenanceMode = await getIsInMaintenanceMode(options.provider, connectionString, options.key)
+    console.log('isInMaintenanceMode')
 
     if (isInMaintenanceMode === null || isInMaintenanceMode === undefined) {
       throw new Error(MAINTENANCE_KEY_MISSING)
     }
 
-    return handleMaintenanceMode(isInMaintenanceMode, options, req) ?? middleware(req, _next)
+    const maintenanceResult = await handleMaintenanceMode(isInMaintenanceMode, options, req)
+
+    if (middleware.afterCheck) {
+      const afterCheckResult = await middleware.afterCheck(req, _next)
+      if (afterCheckResult) return afterCheckResult
+    }
+
+    return maintenanceResult ?? NextResponse.next()
   } catch (e) {
     if (e instanceof Error) throw new Error(e.message)
   }
 }
 
 export const withMaintenanceMode = (
-  middleware: NextMiddleware,
+  { beforeCheck, afterCheck }: { beforeCheck?: NextMiddleware; afterCheck?: NextMiddleware },
   connectionString: string,
   options: MiddlewareFactoryOptions,
 ) => {
+  if (!beforeCheck && !afterCheck) {
+    throw new Error('At least one function (beforeCheck or afterCheck) should be passed')
+  }
+
   return async (req: NextRequest, _next: NextFetchEvent): Promise<NextMiddlewareResult> => {
     const parseResult = MaintenanceModeConfig.safeParse({
-      middleware,
+      middleware: { beforeCheck, afterCheck },
       connectionString,
       options,
     })
@@ -117,7 +146,7 @@ export const withMaintenanceMode = (
     return providerMiddleware({
       req,
       _next,
-      middleware,
+      middleware: { beforeCheck, afterCheck },
       connectionString,
       options,
     })
