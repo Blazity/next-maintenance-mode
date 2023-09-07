@@ -27,18 +27,6 @@ $ npm install --save-dev next-maintenance-mode
 $ pnpm i -D next-maintenance-mode
 ```
 
-## Configuration
-Before using the middleware, you need to configure it with the necessary settings. Here are the options you can specify:
-
-- **provider:** Identify your configuration provider, choose between 'upstash' or 'edge-config'. This field is mandatory.
-- **maintenancePageSlug:** Specify the route to your maintenance page. The default setup directs to '/maintenance'.
-- **key:** Create a unique key to indicate the maintenance mode state in your configuration provider, defaulting to 'isInMaintenanceMode'.
-
-### The connection string structure differs between Upstash and Edge Config:
-
-- **For Upstash:** Include both the URL and token, formatted as url@token.
-- **For Edge Config:** Specify the API endpoint or path given by Edge Config.
-  
 ## Usage
 
 To integrate `next-maintenance-mode` into your Next.js application, insert the following code into your middleware file.
@@ -56,3 +44,32 @@ withMaintenanceMode({
   beforeCheck: NextMiddleware, // function which will be executed before checking the maintenance mode
   afterCheck: NextMiddleware // function which will be executed after checking the maintenance mode
 }, 'your_connection_string_here', middlewareOptions);
+```
+
+Before using the middleware, you need to configure it with the necessary settings. Here are the options you can specify:
+
+- **provider:** Identify your configuration provider, choose between 'upstash' or 'edge-config'. This field is mandatory.
+- **maintenancePageSlug:** Specify the route to your maintenance page. The default setup directs to '/maintenance'.
+- **key:** Create a unique key to indicate the maintenance mode state in your configuration provider, defaulting to 'isInMaintenanceMode'.
+
+#### The connection string structure differs between Upstash and Edge Config:
+
+- **For Upstash:** Include both the URL and token, formatted as **`url@token`**.
+- **For Edge Config:** Specify the API endpoint or path given by Edge Config.
+
+## Error Messages
+
+There are specific error messages which may be encountered while using the middleware:
+
+- **Maintenance Key Missing Error:** 
+  This error occurs if the maintenance key is not found in your configuration provider. It can be encountered when checking the maintenance mode state. 
+
+- **Invalid Connection String:** 
+  This error is triggered when the connection string does not match the selected provider.
+
+- **Unsupported Provider Error:** 
+  This error is thrown when an unsupported provider is passed to the function. 
+
+- **Middleware Configuration Error:** 
+  This error is thrown when neither `beforeCheck` nor `afterCheck` middleware functions are defined during the setup. It ensures that at least one of these functions is implemented to proceed with the maintenance mode check.
+
