@@ -52,5 +52,7 @@ const middlewareOptions = {
   key: 'your_key_here', // Optional
 };
 
-withMaintenanceMode(YourNextMiddlewareFunction, 'your_connection_string_here', middlewareOptions);
-
+withMaintenanceMode({
+  beforeCheck: NextMiddleware, // function which will be executed before checking the maintenance mode
+  afterCheck: NextMiddleware // function which will be executed after checking the maintenance mode
+}, 'your_connection_string_here', middlewareOptions);
