@@ -1,7 +1,5 @@
 # next-maintenance-mode
 
-Creating seamless user experiences even during maintenance periods is essential for modern web applications. The `next-maintenance-mode` middleware gracefully bridges this gap for Next.js applications, empowering developers to seamlessly steer users towards a dedicated maintenance page without compromising the functionality of the site. This package is adaptable, supporting various configuration providers like Upstash and Edge Config to dynamically manage your maintenance state. Let's dive into how you can leverage its features for a smooth, professional, and responsive maintenance mode setup.
-
 ## Overview
 
 `next-maintenance-mode` is a middleware specially designed for Next.js applications, enabling you to easily toggle maintenance mode on and off. When activated, it redirects users to a designated maintenance page, while still keeping essential parts of your site operational. Its compatibility with multiple configuration providers such as Upstash and Edge Config allows for flexible and dynamic maintenance state management.
