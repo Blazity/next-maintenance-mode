@@ -47,6 +47,7 @@ const middlewareOptions = {
   provider: 'upstash' | 'edge-config', // Mandatory
   maintenancePageSlug: '/maintenance', // Optional
   key: 'your_key_here', // Optional
+  cacheTime: 60000 //Optional - defined in ms
 };
 
 withMaintenanceMode({
@@ -60,6 +61,7 @@ Before using the middleware, you need to configure it with the necessary setting
 - **provider:** Identify your configuration provider, choose between 'upstash' or 'edge-config'. This field is mandatory.
 - **maintenancePageSlug:** Specify the route to your maintenance page. The default setup directs to '/maintenance'.
 - **key:** Create a unique key to indicate the maintenance mode state in your configuration provider, defaulting to 'isInMaintenanceMode'.
+- **cacheTime:** Defined in milliseconds, determines how long data is stored in the cache before being refreshed. Utilizing an LRU (Least Recently Used) caching algorithm, helps to save bandwidth.
 
 #### The connection string structure differs between Upstash and Edge Config:
 
