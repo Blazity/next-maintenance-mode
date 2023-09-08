@@ -5,9 +5,11 @@
 `next-maintenance-mode` is a middleware specially designed for Next.js applications, enabling you to easily toggle maintenance mode on and off. When activated, it redirects users to a designated maintenance page, while still keeping essential parts of your site operational. Its compatibility with multiple configuration providers such as Upstash and Edge Config allows for flexible and dynamic maintenance state management.
 
 ## Motivation
-Given that Vercel doesn't offer any support for maintenance mode as platforms like Heroku, there exists a pressing need to simplify this process. At present, we have opted to introduce a selection between two providers.
+Currently, setting up a maintenance mode in Next.js applications can be a complex process, especially when using platforms like Vercel which don't inherently support a maintenance mode option like some other platforms such as Heroku. This existing gap presents a significant opportunity for innovation. Popular solutions, including creating a separate component within the _app file or using environment variables, require a complete app rebuild, which is not only time-consuming but often fails to secure API routes adequately.
 
-|      Provider      |  Reads (free plans)   |
+To address this, we are introducing a streamlined solution that offers the choice between two providers, each with their unique advantages and limitations. Moreover, we implemented optional cache mechanism which helps in saving bandwidth. This makes our solution not only cost-effective but also remarkably flexible, simplifying the maintenance mode setup process significantly.
+
+|      Provider      |  Reads (free plan)   |
 | ------------------ | -------------------   |
 | Vercel/Edge-Config | 50k/month             | 
 | Upstash/Redis      | ~300k/month (10k/day) | 
