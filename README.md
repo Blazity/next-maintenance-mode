@@ -21,7 +21,8 @@ To address this, we are introducing a streamlined solution that offers the choic
 - 🛠️ **Seamless Integration**: Designed to work hand-in-hand with Next.js applications, ensuring an intuitive setup process and seamless operation.
 - 📚 **Multi-Provider Support**: Flexibility to choose between Upstash and Edge Config for configuration, adapting to your preferred workflow and tools.
 - 💻 **Simple API**: With a straightforward API and minimal setup requirements, integrating `next-maintenance-mode` is a breeze.
-
+- 💾 **Cost-effective**: Optional caching option ensures a reduction in bandwidth usage
+  
 ## Installation
 
 To get started with `next-maintenance-mode`, you can install the package using your preferred package manager:
