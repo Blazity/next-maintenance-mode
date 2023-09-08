@@ -5,9 +5,9 @@
 `next-maintenance-mode` is a middleware specially designed for Next.js applications, enabling you to easily toggle maintenance mode on and off. When activated, it redirects users to a designated maintenance page, while still keeping essential parts of your site operational. Its compatibility with multiple configuration providers such as Upstash and Edge Config allows for flexible and dynamic maintenance state management.
 
 ## Motivation
-Currently, setting up a maintenance mode in Next.js applications can be a complex process, especially when using platforms like Vercel which don't inherently support a maintenance mode option like some other platforms such as Heroku. This existing gap presents a significant opportunity for innovation. Popular solutions, including creating a separate component within the _app file and using environment variables, require a complete app rebuild, which is not only time-consuming but often fails to secure API routes adequately.
+Setting up a maintenance mode in Next.js apps can be a hassle, particularly on platforms like Vercel, which lack built-in support for this feature. Current methods are time-consuming and can leave API routes vulnerable.
 
-To address this, we are introducing a streamlined solution that offers the choice between two providers, each with its unique advantages and limitations. Moreover, we implemented an optional cache mechanism which helps in saving bandwidth. This makes our solution not only cost-effective but also remarkably flexible, simplifying the maintenance mode setup process significantly.
+To solve this, we've created a straightforward solution that lets you choose between two different providers, making the setup process for maintenance mode quicker and more cost-effective, without skimping on security. This solution also includes an optional caching feature to help save bandwidth.
 
 |      Provider      |  Reads (free plan)   |
 | ------------------ | -------------------   |
@@ -17,11 +17,13 @@ To address this, we are introducing a streamlined solution that offers the choic
 
 ## Features
 
-- ⚡️ **App Directory Ready**: Easily integrates with the new Next.js app directory.
+- ⚡️ **Next.js Compatibility**: Out-of-the-box integration with the new Next.js app directory, providing a smooth user experience.
 - 🛠️ **Seamless Integration**: Designed to work hand-in-hand with Next.js applications, ensuring an intuitive setup process and seamless operation.
-- 📚 **Multi-Provider Support**: Flexibility to choose between Upstash and Edge Config for configuration, adapting to your preferred workflow and tools.
-- 💻 **Simple API**: With a straightforward API and minimal setup requirements, integrating `next-maintenance-mode` is a breeze.
-- 💾 **Cost-effective**: Optional caching option ensures a reduction in bandwidth usage
+- 📚 **Provider Options**: Offers the flexibility to choose between Upstash and Edge Config as configuration providers, allowing you to tailor the solution to your existing workflow and tools.
+- 💻 **Simple API**: One Wrapper to Rule Them All - ``withMaintenanceMode``
+- 💾 **Cost-Efficiency**: Our optional caching feature reduces bandwidth usage, making your maintenance mode not only more efficient but also cost-effective.
+- 🔄 **Dynamic Toggle**: Easily toggle maintenance mode on and off without the need for a complete app rebuild, saving you time and effort.
+
   
 ## Installation
 
@@ -66,7 +68,7 @@ Before using the middleware, you need to configure it with the necessary setting
 - **key:** Create a unique key to indicate the maintenance mode state in your configuration provider, defaulting to 'isInMaintenanceMode'.
 - **cacheTime:** Defined in milliseconds, determines how long data is stored in the cache before being refreshed. Utilizing an LRU (Least Recently Used) caching algorithm, helps to save bandwidth.
 
-⚠️ LRU relies on the short-term memory, due to that cached maintenance state can be unexpectedly reset. If the cached state expires or disappears the mechanism still works but has to check and cache the state once again. Note that only maintenance status is cached, both middleware functions will should as expected.
+⚠️ Keep in mind, due to its nature the LRU cache might occasionally reset, but it's nothing to worry about. If this happens, the status is automatically checked in the provider and updated. This won't affect the passed middleware's main functions - they'll keep working as they should.
 
 #### The connection string structure differs between Upstash and Edge Config:
 
@@ -75,7 +77,7 @@ Before using the middleware, you need to configure it with the necessary setting
 
 ## Error Messages
 
-There are specific error messages which may be encountered while using the middleware:
+There are specific error messages that may be encountered while using the middleware:
 
 - **Maintenance Key Missing Error:** 
   This error occurs if the maintenance key is not found in your configuration provider. It can be encountered when checking the maintenance mode state. 
