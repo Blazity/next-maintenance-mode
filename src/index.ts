@@ -4,6 +4,7 @@ import { Redis } from '@upstash/redis'
 import { createClient } from '@vercel/edge-config'
 import { NextMiddlewareResult } from 'next/dist/server/web/types'
 import { z } from 'zod'
+import { LRUCache } from 'typescript-lru-cache'
 
 const MAINTENANCE_KEY_MISSING = 'Maintenance mode key is not set'
 
@@ -13,6 +14,7 @@ type MiddlewareFactoryOptions = Readonly<{
   provider: Provider
   maintenancePageSlug?: string
   key?: string
+  cacheTime?: number
 }>
 
 type ProviderMiddleware = Readonly<{
@@ -24,6 +26,7 @@ type ProviderMiddleware = Readonly<{
   }
   connectionString: string
   options: MiddlewareFactoryOptions
+  cache?: LRUCache<string>
 }>
 
 const MiddlewareConfig = z
@@ -73,27 +76,43 @@ const handleMaintenanceMode = async (
   }
   return NextResponse.next()
 }
+
 const getIsInMaintenanceMode = async (
-  provider: Provider,
+  options: MiddlewareFactoryOptions,
   connectionString: string,
-  key?: string,
+  cache?: LRUCache<string>,
 ): Promise<boolean | null | undefined> => {
+  const provider = options?.provider
+  const key = options?.key
+  const cacheKey = `${provider}-${connectionString}-${key}`
+
+  if (!!cache && cache.has(cacheKey)) {
+    return cache.get(cacheKey)
+  }
+
   try {
+    let result: boolean | null | undefined
+
     switch (provider) {
       case 'upstash': {
         const [url, token] = connectionString.split('@')
         const redis = new Redis({ url: url, token: token })
 
-        return redis.get<boolean | null>(key || 'isInMaintenanceMode')
+        result = await redis.get<boolean | null>(key || 'isInMaintenanceMode')
+        break
       }
       case 'edge-config': {
         const edgeConfig = createClient(connectionString)
 
-        return edgeConfig.get<boolean | undefined>(key || 'isInMaintenanceMode')
+        result = await edgeConfig.get<boolean | undefined>(key || 'isInMaintenanceMode')
+        break
       }
       default:
         throw new Error(`Unsupported provider: ${provider}`)
     }
+
+    !!cache && cache.set(cacheKey, result)
+    return result
   } catch (e) {
     if (e instanceof Error) {
       throw new Error(e.message)
@@ -103,15 +122,14 @@ const getIsInMaintenanceMode = async (
   }
 }
 
-const providerMiddleware = async ({ req, _next, middleware, connectionString, options }: ProviderMiddleware) => {
+const providerMiddleware = async ({ req, _next, middleware, connectionString, options, cache }: ProviderMiddleware) => {
   try {
     if (middleware.beforeCheck) {
       const beforeCheckResult = await middleware.beforeCheck(req, _next)
       if (beforeCheckResult) return beforeCheckResult
     }
 
-    const isInMaintenanceMode = await getIsInMaintenanceMode(options.provider, connectionString, options.key)
-    console.log('isInMaintenanceMode')
+    const isInMaintenanceMode = await getIsInMaintenanceMode(options, connectionString, cache)
 
     if (isInMaintenanceMode === null || isInMaintenanceMode === undefined) {
       throw new Error(MAINTENANCE_KEY_MISSING)
@@ -139,7 +157,8 @@ export const withMaintenanceMode = (
   if (!beforeCheck && !afterCheck) {
     throw new Error('At least one function (beforeCheck or afterCheck) should be passed')
   }
-
+  const cacheTime = options?.cacheTime
+  const cache = !!cacheTime ? new LRUCache({ maxSize: 1, entryExpirationTimeInMS: cacheTime ?? 60000 }) : undefined
   return async (req: NextRequest, _next: NextFetchEvent): Promise<NextMiddlewareResult> => {
     const parseResult = MaintenanceModeConfig.safeParse({
       middleware: { beforeCheck, afterCheck },
@@ -153,6 +172,7 @@ export const withMaintenanceMode = (
       middleware: { beforeCheck, afterCheck },
       connectionString,
       options,
+      cache,
     })
   }
 }
