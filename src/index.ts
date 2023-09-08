@@ -81,8 +81,7 @@ const getIsInMaintenanceMode = async (
   try {
     switch (provider) {
       case 'upstash': {
-        const [protocolAndUrl, token] = connectionString.split('@')
-        const url = protocolAndUrl
+        const [url, token] = connectionString.split('@')
         const redis = new Redis({ url: url, token: token })
 
         return redis.get<boolean | null>(key || 'isInMaintenanceMode')
@@ -96,7 +95,11 @@ const getIsInMaintenanceMode = async (
         throw new Error(`Unsupported provider: ${provider}`)
     }
   } catch (e) {
-    if (e instanceof Error) throw new Error(e.message)
+    if (e instanceof Error) {
+      throw new Error(e.message)
+    } else {
+      throw new Error('Unknown error')
+    }
   }
 }
 
@@ -124,6 +127,7 @@ const providerMiddleware = async ({ req, _next, middleware, connectionString, op
     return maintenanceResult ?? NextResponse.next()
   } catch (e) {
     if (e instanceof Error) throw new Error(e.message)
+    else throw new Error('Unknown error')
   }
 }
 
