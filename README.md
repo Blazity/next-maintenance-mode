@@ -78,18 +78,12 @@ Before using the middleware, you need to configure it with the necessary setting
 ## Error Messages
 
 There are specific error messages that may be encountered while using the middleware:
-
-- **Maintenance Key Missing Error:** 
-  This error occurs if the maintenance key is not found in your configuration provider. It can be encountered when checking the maintenance mode state. 
-
-- **Invalid Connection String:** 
-  This error is triggered when the connection string does not match the selected provider.
-
-- **Unsupported Provider Error:** 
-  This error is thrown when an unsupported provider is passed to the function. 
-
-- **Middleware Configuration Error:** 
-  This error is thrown when neither `beforeCheck` nor `afterCheck` middleware functions are defined during the setup. It ensures that at least one of these functions is implemented to proceed with the maintenance mode check.
+| Error Message                   | Description                                                                                                                                                                      |
+|---------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Maintenance Key Missing Error   | This error occurs if the maintenance key is not found in your configuration provider. It can be encountered when checking the maintenance mode state.                            |
+| Invalid Connection String       | This error is triggered when the connection string does not match the selected provider.                                                                                          |
+| Unsupported Provider Error      | This error is thrown when an unsupported provider is passed to the function.                                                                                                      |
+| Middleware Configuration Error  | This error is thrown when neither `beforeCheck` nor `afterCheck` middleware functions are defined during the setup. It ensures that at least one of these functions is implemented to proceed with the maintenance mode check. |
 
 ## 🙌 Contribution
 
