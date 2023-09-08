@@ -158,7 +158,7 @@ export const withMaintenanceMode = (
     throw new Error('At least one function (beforeCheck or afterCheck) should be passed')
   }
   const cacheTime = options?.cacheTime
-  const cache = !!cacheTime ? new LRUCache({ maxSize: 1, entryExpirationTimeInMS: cacheTime ?? 60000 }) : undefined
+  const cache = !!cacheTime ? new LRUCache({ maxSize: 1, entryExpirationTimeInMS: cacheTime }) : undefined
   return async (req: NextRequest, _next: NextFetchEvent): Promise<NextMiddlewareResult> => {
     const parseResult = MaintenanceModeConfig.safeParse({
       middleware: { beforeCheck, afterCheck },
