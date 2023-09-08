@@ -63,6 +63,8 @@ Before using the middleware, you need to configure it with the necessary setting
 - **key:** Create a unique key to indicate the maintenance mode state in your configuration provider, defaulting to 'isInMaintenanceMode'.
 - **cacheTime:** Defined in milliseconds, determines how long data is stored in the cache before being refreshed. Utilizing an LRU (Least Recently Used) caching algorithm, helps to save bandwidth.
 
+⚠️ LRU relies on the short-term memory, due to that cached maintenance state can be unexpectedly reset. If the cached state expires or disappears the mechanism still works but has to check and cache the state once again.
+
 #### The connection string structure differs between Upstash and Edge Config:
 
 - **For Upstash:** Include both the URL and token, formatted as **`url@token`**.
