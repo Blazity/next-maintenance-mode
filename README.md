@@ -47,7 +47,7 @@ const middlewareOptions = {
   provider: 'upstash' | 'edge-config', // Mandatory
   maintenancePageSlug: '/maintenance', // Optional
   key: 'your_key_here', // Optional
-  cacheTime: 60000 //Optional - defined in ms
+  cacheTime: 'number' //Optional - defined in ms for e.g. 60000 = one minute
 };
 
 withMaintenanceMode({
