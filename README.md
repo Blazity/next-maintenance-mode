@@ -78,6 +78,21 @@ Before using the middleware, you need to configure it with the necessary setting
 
 ⚠️ Keep in mind, due to its nature the LRU cache might occasionally reset, but it's nothing to worry about. If this happens, the status is automatically checked in the provider and updated. This won't affect passed middleware's functions - they are not cached.
 
+### Setting maintenance status from different locations:
+To toggle the maintenance mode status directly through code, you can use the updateMaintenanceModeStatus function. Here's how you can call this function with appropriate parameters:
+
+```javascript
+updateMaintenanceModeStatus(true, {
+    provider: 'upstash' | 'edge-config', // specify the provider
+    connectionString: 'your_connection_string_here', // provide your connection string
+    key?: 'your_key_here', // optional, default is "isInMaintenanceMode"
+    maintenanceEdgeConfigId?: 'your_edge_config_id_here', // necessary for edge-config provider
+    maintenanceModeVercelApiToken?: 'your_vercel_api_token_here', // necessary for edge-config provider
+  })
+```
+
+⚠️ Note that if caching is activated, alterations to the maintenance status might not take effect immediately.
+
 #### The connection string structure differs between Upstash and Edge Config:
 
 - **For Upstash:** Include both the URL and token, formatted as **`url@token`**.
