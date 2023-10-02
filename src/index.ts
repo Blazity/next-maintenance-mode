@@ -209,7 +209,10 @@ const ToggleOptionsSchema = z
   )
   .refine(
     (data) => {
-      return data.provider === 'edge-config' && !!data.maintenanceEdgeConfigId && !!data.maintenanceModeVercelApiToken
+      if (data.provider === 'edge-config') {
+        return !!data.maintenanceEdgeConfigId && !!data.maintenanceModeVercelApiToken
+      }
+      return true
     },
     {
       message: 'Missing maintenanceEdgeConfigId or maintenanceModeVercelApiToken',
@@ -233,7 +236,7 @@ const updateMaintenanceModeStatus = async (isActive: boolean, options: ToggleOpt
         break
       }
       case 'edge-config': {
-        await fetch(`https://api.vercel.com/v1/edge-config/${maintenanceEdgeConfigId}/items`, {
+        const res = await fetch(`https://api.vercel.com/v1/edge-config/${maintenanceEdgeConfigId}/items`, {
           method: 'PATCH',
           headers: {
             Authorization: `Bearer ${maintenanceModeVercelApiToken}`,
@@ -249,6 +252,7 @@ const updateMaintenanceModeStatus = async (isActive: boolean, options: ToggleOpt
             ],
           }),
         })
+        if (res.status !== 200) throw new Error('Error updating maintenance mode status')
         break
       }
       default:
