@@ -252,7 +252,7 @@ const updateMaintenanceModeStatus = async (isActive: boolean, options: ToggleOpt
             ],
           }),
         })
-        if (res.status !== 200) throw new Error('Error updating maintenance mode status')
+        if (res.status !== 200) throw new Error(`${res.status} - ${res.statusText}`)
         break
       }
       default:
