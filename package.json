@@ -1,11 +1,11 @@
 {
   "name": "next-maintenance-mode",
   "version": "1.0.0",
-  "description": "",
+  "description": "The intuitive cost-efficient middleware for effortless maintenance mode toggling. Supported by multiple configuration options and a straightforward API. Ready to integrate with your Next.js app directory!",
   "source": "src/index.ts",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
-  "author": "woywro",
+  "author": "Blazity",
   "license": "MIT",
   "files": [
     "lib/**/*"
