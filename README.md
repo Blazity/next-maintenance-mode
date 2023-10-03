@@ -1,8 +1,8 @@
 <p align="center">
   <h2 align="center">Next.js Maintenance Mode</h2>
   <p align="center">
-     <a href="https://blazity.com/?utm_source=next-maintenance-mode&utm_medium=github"><img src="https://img.shields.io/badge/Next.js-Experts-yellowgreen.svg" style="display: inherit;"/></a>
-<a href="https://blazity.com/?utm_source=next-maintenance-mode&utm_medium=github" target="_blank"><img alt="Blazity" src="https://img.shields.io/badge/Author-Blazity-green.svg" style="display: inherit;"/></a>
+<a href="https://github.com/Blazity/next-maintenance-mode" target="_blank"><img src="https://img.shields.io/badge/Next.js-Experts-yellowgreen.svg" style="display: inherit;"/></a>
+<a href="https://github.com/Blazity/next-maintenance-mode" target="_blank"><img alt="Blazity" src="https://img.shields.io/badge/Author-Blazity-green.svg" style="display: inherit;"/></a>
 <a href="https://opensource.org/licenses/MIT/" target="_blank"><img alt="MIT License" src="https://img.shields.io/badge/License-MIT-blue.svg" style="display: inherit;"/></a>
   </p>
   <br>
