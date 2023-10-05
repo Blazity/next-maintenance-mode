@@ -129,9 +129,10 @@ const getIsInMaintenanceMode = async (
 
 const providerMiddleware = async ({ req, _next, middleware, connectionString, options, cache }: ProviderMiddleware) => {
   try {
+    let beforeCheckResult
     if (middleware.beforeCheck) {
-      const beforeCheckResult = await middleware.beforeCheck(req, _next)
-      if (beforeCheckResult) return beforeCheckResult
+      beforeCheckResult = await middleware.beforeCheck(req, _next)
+      if (beforeCheckResult && !middleware.afterCheck) return beforeCheckResult
     }
 
     const isInMaintenanceMode = await getIsInMaintenanceMode(options, connectionString, cache)
@@ -144,10 +145,10 @@ const providerMiddleware = async ({ req, _next, middleware, connectionString, op
 
     if (middleware.afterCheck) {
       const afterCheckResult = await middleware.afterCheck(req, _next)
-      if (afterCheckResult) return afterCheckResult
+      return afterCheckResult || beforeCheckResult || maintenanceResult
     }
 
-    return maintenanceResult
+    return beforeCheckResult || maintenanceResult
   } catch (e) {
     if (e instanceof Error) throw new Error(e.message)
     else throw new Error('Unknown error')
@@ -266,5 +267,4 @@ const updateMaintenanceModeStatus = async (isActive: boolean, options: ToggleOpt
     }
   }
 }
-
 export { withMaintenanceMode, updateMaintenanceModeStatus }
