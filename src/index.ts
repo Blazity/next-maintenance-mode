@@ -129,10 +129,11 @@ const getIsInMaintenanceMode = async (
 
 const providerMiddleware = async ({ req, _next, middleware, connectionString, options, cache }: ProviderMiddleware) => {
   try {
-    let beforeCheckResult
     if (middleware.beforeCheck) {
-      beforeCheckResult = await middleware.beforeCheck(req, _next)
-      if (beforeCheckResult && !middleware.afterCheck) return beforeCheckResult
+      const beforeCheckResponse = await middleware.beforeCheck(req, _next)
+      if (beforeCheckResponse instanceof NextResponse) {
+        return beforeCheckResponse
+      }
     }
 
     const isInMaintenanceMode = await getIsInMaintenanceMode(options, connectionString, cache)
@@ -141,14 +142,13 @@ const providerMiddleware = async ({ req, _next, middleware, connectionString, op
       throw new Error(MAINTENANCE_KEY_MISSING)
     }
 
-    const maintenanceResult = await handleMaintenanceMode(isInMaintenanceMode, options, req)
-
-    if (middleware.afterCheck) {
-      const afterCheckResult = await middleware.afterCheck(req, _next)
-      return afterCheckResult || beforeCheckResult || maintenanceResult
+    if (isInMaintenanceMode) {
+      return await handleMaintenanceMode(isInMaintenanceMode, options, req)
     }
 
-    return beforeCheckResult || maintenanceResult
+    if (middleware.afterCheck) {
+      return await middleware.afterCheck(req, _next)
+    }
   } catch (e) {
     if (e instanceof Error) throw new Error(e.message)
     else throw new Error('Unknown error')
