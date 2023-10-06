@@ -8,7 +8,6 @@ import { LRUCache } from 'typescript-lru-cache'
 
 const DEFAULT_MAINTENANCE_PAGE_SLUG = '/maintenance'
 const DEFAULT_MAINTENANCE_MODE_KEY = 'isInMaintenanceMode'
-const DEFAULT_CACHE_TIME = 60000
 
 const MAINTENANCE_KEY_MISSING = 'Maintenance mode key is not found in the specified provider'
 
@@ -167,7 +166,7 @@ const withMaintenanceMode = (
   const cache = !!cacheTime
     ? new LRUCache({
         maxSize: 1,
-        entryExpirationTimeInMS: cacheTime ?? DEFAULT_CACHE_TIME,
+        entryExpirationTimeInMS: cacheTime,
       })
     : undefined
   return async (req: NextRequest, _next: NextFetchEvent): Promise<NextMiddlewareResult> => {
