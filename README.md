@@ -8,7 +8,7 @@
   <br>
 </p>
 
-![Alt Text](https://github.com/woywro/next-maintenance-mode/raw/main/gif.gif "Logo Title Text 1")
+![Alt Text](https://github.com/woywro/next-maintenance-mode/raw/main/gif.gif "example usage")
 
 ## Overview
 
