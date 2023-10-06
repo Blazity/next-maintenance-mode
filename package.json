@@ -1,10 +1,16 @@
 {
   "name": "next-maintenance-mode",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The intuitive cost-efficient middleware for effortless maintenance mode toggling. Supported by multiple configuration options and a straightforward API. Ready to integrate with your Next.js app directory!",
   "source": "src/index.ts",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
+  "keywords": [
+    "react",
+    "nextjs",
+    "vercel",
+    "redis"
+  ],
   "author": "Blazity",
   "license": "MIT",
   "files": [
