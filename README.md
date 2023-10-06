@@ -31,7 +31,7 @@ To solve this, we've created a straightforward solution that lets you choose bet
 - 🛠️ **Seamless Integration**: Designed to work hand-in-hand with Next.js applications, ensuring an intuitive setup process and seamless operation.
 - 📚 **Provider Options**: Offers the flexibility to choose between Upstash and Edge Config as configuration providers, allowing you to tailor the solution to your existing workflow and tools.
 - 💻 **Simple API**: One Wrapper to Rule Them All - ``withMaintenanceMode``
-- 💾 **Cost-Efficiency**: Our optional caching feature reduces bandwidth usage, making your maintenance mode not only more efficient but also cost-effective.
+- 💾 **Bandwidth Reduction**: Our optional caching feature reduces bandwidth usage, making your maintenance mode not only more efficient but also cost-effective.
 - 🔄 **Dynamic Toggle**: Easily toggle maintenance mode on and off without the need for a complete app rebuild, saving you time and effort.
 
   
