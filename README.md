@@ -8,6 +8,8 @@
   <br>
 </p>
 
+![Alt Text](https://github.com/woywro/next-maintenance-mode/raw/main/gif.gif "Logo Title Text 1")
+
 ## Overview
 
 `next-maintenance-mode` is a middleware specially designed for Next.js applications, enabling you to easily toggle maintenance mode on and off. When activated, it redirects users to a designated maintenance page, while still keeping essential parts of your site operational. Its compatibility with multiple configuration providers such as Upstash and Edge Config allows for flexible and dynamic maintenance state management.
@@ -64,8 +66,8 @@ const middlewareOptions = {
 };
 
 withMaintenanceMode({
-  beforeCheck: NextMiddleware, // function which will be executed before checking the maintenance mode
-  afterCheck: NextMiddleware // function which will be executed after checking the maintenance mode
+  beforeCheck: NextMiddleware, // function which will be executed before checking the maintenance mode (if an instance of NextResponse is returned, checking maintenance mode status & afterCheck is skipped)
+  afterCheck: NextMiddleware // function which will be executed after checking the maintenance mode (only if maintenance mode status is set to false)
 }, 'your_connection_string_here', middlewareOptions);
 ```
 
