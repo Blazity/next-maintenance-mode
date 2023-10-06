@@ -1,5 +1,5 @@
 <p align="center">
-  <h2 align="center">Next.js Maintenance Mode</h2>
+  <h2 align="center">Next.js Maintenance Mode 🛠️</h2>
   <p align="center">
 <a href="https://github.com/Blazity/next-maintenance-mode" target="_blank"><img src="https://img.shields.io/badge/Next.js-Experts-yellowgreen.svg" style="display: inherit;"/></a>
 <a href="https://github.com/Blazity/next-maintenance-mode" target="_blank"><img alt="Blazity" src="https://img.shields.io/badge/Author-Blazity-green.svg" style="display: inherit;"/></a>
