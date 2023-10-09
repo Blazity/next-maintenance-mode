@@ -8,33 +8,32 @@
   <br>
 </p>
 
-![Alt Text](https://github.com/woywro/next-maintenance-mode/raw/main/gif.gif "example usage")
+![Alt Text](https://github.com/woywro/next-maintenance-mode/raw/main/gif.gif?raw=true 'example usage')
 
 ## Overview
 
 `next-maintenance-mode` is a middleware specially designed for Next.js applications, enabling you to easily toggle maintenance mode on and off. When activated, it redirects users to a designated maintenance page, while still keeping essential parts of your site operational. Its compatibility with multiple configuration providers such as Upstash and Edge Config allows for flexible and dynamic maintenance state management.
 
 ## Motivation
+
 Setting up a maintenance mode in Next.js apps can be a hassle, particularly on platforms like Vercel, which lack built-in support for this feature. Current methods are time-consuming and can leave API routes vulnerable.
 
 To solve this, we've created a straightforward solution that lets you choose between two different providers, making the setup process for maintenance mode quicker and more cost-effective, without skimping on security. This solution also includes an optional caching feature to help save bandwidth.
 
-|      Provider      |  Reads (free plan)   |
-| ------------------ | -------------------   |
-| Vercel/Edge-Config | 50k/month             | 
-| Upstash/Redis      | ~ 300k/month (10k/day) | 
-
+| Provider           | Reads (free plan)      |
+| ------------------ | ---------------------- |
+| Vercel/Edge-Config | 50k/month              |
+| Upstash/Redis      | ~ 300k/month (10k/day) |
 
 ## Features
 
 - ⚡️ **Next.js Compatibility**: Out-of-the-box integration with the new Next.js app directory, providing a smooth user experience.
 - 🛠️ **Seamless Integration**: Designed to work hand-in-hand with Next.js applications, ensuring an intuitive setup process and seamless operation.
 - 📚 **Provider Options**: Offers the flexibility to choose between Upstash and Edge Config as configuration providers, allowing you to tailor the solution to your existing workflow and tools.
-- 💻 **Simple API**: One Wrapper to Rule Them All - ``withMaintenanceMode``
+- 💻 **Simple API**: One Wrapper to Rule Them All - `withMaintenanceMode`
 - 💾 **Bandwidth Reduction**: Our optional caching feature reduces bandwidth usage, making your maintenance mode not only more efficient but also cost-effective.
 - 🔄 **Dynamic Toggle**: Easily toggle maintenance mode on and off without the need for a complete app rebuild, saving you time and effort.
 
-  
 ## Installation
 
 To get started with `next-maintenance-mode`, you can install the package using your preferred package manager:
@@ -56,19 +55,23 @@ $ pnpm i next-maintenance-mode
 To integrate `next-maintenance-mode` into your Next.js application, insert the following code into your middleware file.
 
 ```javascript
-import { withMaintenanceMode } from 'next-maintenance-mode';
+import { withMaintenanceMode } from 'next-maintenance-mode'
 
 const middlewareOptions = {
   provider: 'upstash' | 'edge-config', // Mandatory
   maintenancePageSlug: '/maintenance', // Optional
   key: 'your_key_here', // Optional
-  cacheTime: 'number' //Optional - defined in ms for e.g. 60000 = one minute
-};
+  cacheTime: 'number', //Optional - defined in ms for e.g. 60000 = one minute
+}
 
-withMaintenanceMode({
-  beforeCheck: NextMiddleware, // function which will be executed before checking the maintenance mode (if an instance of NextResponse is returned, checking maintenance mode status & afterCheck is skipped)
-  afterCheck: NextMiddleware // function which will be executed after checking the maintenance mode (only if maintenance mode status is set to false)
-}, 'your_connection_string_here', middlewareOptions);
+withMaintenanceMode(
+  {
+    beforeCheck: NextMiddleware, // function which will be executed before checking the maintenance mode (if an instance of NextResponse is returned, checking maintenance mode status & afterCheck is skipped)
+    afterCheck: NextMiddleware, // function which will be executed after checking the maintenance mode (only if maintenance mode status is set to false)
+  },
+  'your_connection_string_here',
+  middlewareOptions,
+)
 ```
 
 Before using the middleware, you need to configure it with the necessary settings. Here are the options you can specify:
@@ -81,6 +84,7 @@ Before using the middleware, you need to configure it with the necessary setting
 ⚠️ Keep in mind, due to edge functions nature the LRU cache might occasionally reset, but it's nothing to worry about. If this happens, the status is automatically checked in the provider and updated. This won't affect passed middleware's functions - they are not cached.
 
 ### Setting maintenance status from different locations:
+
 To toggle the maintenance mode status directly through code, you can use the updateMaintenanceModeStatus function. Here's how you can call this function with appropriate parameters:
 
 ```javascript
@@ -103,12 +107,12 @@ updateMaintenanceModeStatus(true, {
 ## Error Messages
 
 There are specific error messages that may be encountered while using the middleware:
-| Error Message                   | Description                                                                                                                                                                      |
+| Error Message | Description |
 |---------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Maintenance Key Missing Error   | This error occurs if the maintenance key is not found in your configuration provider. It can be encountered when checking the maintenance mode state.                            |
-| Invalid Connection String       | This error is triggered when the connection string does not match the selected provider.                                                                                          |
-| Unsupported Provider Error      | This error is thrown when an unsupported provider is passed to the function.                                                                                                      |
-| Middleware Configuration Error  | This error is thrown when neither `beforeCheck` nor `afterCheck` middleware functions are defined during the setup. It ensures that at least one of these functions is implemented to proceed with the maintenance mode check. |
+| Maintenance Key Missing Error | This error occurs if the maintenance key is not found in your configuration provider. It can be encountered when checking the maintenance mode state. |
+| Invalid Connection String | This error is triggered when the connection string does not match the selected provider. |
+| Unsupported Provider Error | This error is thrown when an unsupported provider is passed to the function. |
+| Middleware Configuration Error | This error is thrown when neither `beforeCheck` nor `afterCheck` middleware functions are defined during the setup. It ensures that at least one of these functions is implemented to proceed with the maintenance mode check. |
 
 ## 🙌 Contribution
 
