@@ -44,11 +44,11 @@ $ yarn add next-maintenance-mode
 
 # or
 
-$ npm install --save-dev next-maintenance-mode
+$ npm install next-maintenance-mode
 
 # or
 
-$ pnpm i -D next-maintenance-mode
+$ pnpm i next-maintenance-mode
 ```
 
 ## Usage
