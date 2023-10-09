@@ -8,7 +8,7 @@
   <br>
 </p>
 
-![Alt Text](https://github.com/woywro/next-maintenance-mode/raw/main/gif.gif?raw=true 'example usage')
+![Alt Text](https://github.com/Blazity/next-maintenance-mode/raw/main/gif.gif?raw=true 'example usage')
 
 ## Overview
 
