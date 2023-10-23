@@ -66,7 +66,7 @@ const middlewareOptions = {
 
 withMaintenanceMode(
   {
-    beforeCheck: NextMiddleware, // function which will be executed before checking the maintenance mode (if an instance of NextResponse is returned, checking maintenance mode status & afterCheck is skipped)
+    beforeCheck: NextMiddleware, // function which will be executed before checking the maintenance mode (if an instance of NextResponse is returned, checking maintenance mode status & afterCheck is skipped) 
     afterCheck: NextMiddleware, // function which will be executed after checking the maintenance mode (only if maintenance mode status is set to false)
   },
   'your_connection_string_here',
@@ -82,6 +82,16 @@ Before using the middleware, you need to configure it with the necessary setting
 - **cacheTime:** Defined in milliseconds, determines how long data is stored in the cache before being refreshed. Utilizing an LRU (Least Recently Used) caching algorithm, helps to save bandwidth.
 
 ⚠️ Keep in mind, due to edge functions nature the LRU cache might occasionally reset, but it's nothing to worry about. If this happens, the status is automatically checked in the provider and updated. This won't affect passed middleware's functions - they are not cached.
+
+### Access Parameters in Check Events:
+
+You can directly access the following parameters during events:
+- **req: NextRequest**
+- **_next: NextFetchEvent**
+
+These can be accessed in:
+- `beforeCheck`
+- `afterCheck`
 
 ### Setting maintenance status from different locations:
 
