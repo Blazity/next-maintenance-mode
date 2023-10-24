@@ -83,16 +83,6 @@ Before using the middleware, you need to configure it with the necessary setting
 
 ⚠️ Keep in mind, due to edge functions nature the LRU cache might occasionally reset, but it's nothing to worry about. If this happens, the status is automatically checked in the provider and updated. This won't affect passed middleware's functions - they are not cached.
 
-### Access Parameters in Check Events:
-
-You can directly access the following parameters during events:
-- **req: NextRequest**
-- **_next: NextFetchEvent**
-
-These can be accessed in:
-- `beforeCheck`
-- `afterCheck`
-
 ### Setting maintenance status from different locations:
 
 To toggle the maintenance mode status directly through code, you can use the updateMaintenanceModeStatus function. Here's how you can call this function with appropriate parameters:
@@ -108,6 +98,48 @@ updateMaintenanceModeStatus(true, {
 ```
 
 ⚠️ Note that if caching is activated, alterations to the maintenance status might not take effect immediately.
+
+### Access Parameters in Check Events:
+
+You can directly access the following parameters during events:
+- **req: NextRequest**
+- **_next: NextFetchEvent**
+
+These can be accessed in:
+- `beforeCheck`
+- `afterCheck`
+
+**Example integration with next-auth:**
+```javascript
+import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
+import { withMaintenanceMode } from "next-maintenance-mode";
+import { getToken } from "next-auth/jwt";
+
+async function firstMiddleware(req: NextRequest, _next: NextFetchEvent) {
+
+  const token = await getToken({ req });
+  if (!token) {
+    return NextResponse.rewrite(new URL("/sign-in", req.nextUrl));
+  }
+  if (token.role === "admin") {
+    return NextResponse.next(); //If you want you can disable checking maintenance mode for users with an admin role
+  }
+}
+
+async function secondMiddleware(req: NextRequest, _next: NextFetchEvent) {
+  console.log("secondMiddleware");
+}
+
+export default withMaintenanceMode(
+  { beforeCheck: firstMiddleware, afterCheck: secondMiddleware },
+  process.env.MAINTENANCE_MODE_CONNECTON_STRING as any,
+  {
+    provider: process.env.MAINTENANCE_MODE_PROVIDER as any,
+    maintenancePageSlug: process.env.MAINTENANCE_MODE_PAGE_SLUG,
+    key: process.env.MAINTENANCE_MODE_KEY,
+  }
+);
+```
 
 #### The connection string structure differs between Upstash and Edge Config:
 
