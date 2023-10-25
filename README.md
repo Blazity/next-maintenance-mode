@@ -16,7 +16,7 @@
 
 ## Motivation
 
-Setting up a maintenance mode in Next.js apps can be a hassle, particularly on platforms like Vercel, which lack built-in support for this feature. Current methods are time-consuming and can leave API routes vulnerable.
+Setting up a maintenance mode in Next.js apps can be a hassle, particularly on certain hosting providers, which lack built-in support for this feature. Current methods are time-consuming and can leave API routes vulnerable.
 
 To solve this, we've created a straightforward solution that lets you choose between two different providers, making the setup process for maintenance mode quicker and more cost-effective, without skimping on security. This solution also includes an optional caching feature to help save bandwidth.
 
