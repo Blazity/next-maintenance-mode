@@ -12,11 +12,11 @@
 
 ## Overview
 
-`next-maintenance-mode` is a middleware specially designed for Next.js applications, enabling you to easily toggle maintenance mode on and off. When activated, it redirects users to a designated maintenance page, while still keeping essential parts of your site operational. Its compatibility with multiple configuration providers such as Upstash and Edge Config allows for flexible and dynamic maintenance state management.
+`next-maintenance-mode` is a middleware specially designed for Next.js applications, enabling you to easily toggle maintenance mode on and off. When activated, it redirects users to a designated maintenance page. Its compatibility with configuration providers such as Upstash and Edge Config allows for flexible and dynamic maintenance state management.
 
 ## Motivation
 
-Setting up a maintenance mode in Next.js apps can be a hassle, particularly on certain hosting providers, which lack built-in support for this feature. Current methods are time-consuming and can leave API routes vulnerable.
+Setting up a maintenance mode in Next.js apps can be a hassle, particularly on certain hosting providers, which lack built-in support for this feature. Current methods are time-consuming and usually leave API routes vulnerable.
 
 To solve this, we've created a straightforward solution that lets you choose between two different providers, making the setup process for maintenance mode quicker and more cost-effective, without skimping on security. This solution also includes an optional caching feature to help save bandwidth.
 
@@ -58,7 +58,7 @@ To integrate `next-maintenance-mode` into your Next.js application, insert the f
 import { withMaintenanceMode } from 'next-maintenance-mode'
 
 const middlewareOptions = {
-  provider: 'upstash' | 'edge-config', // Mandatory
+  provider: 'upstash' | 'edge-config', // Required
   maintenancePageSlug: '/maintenance', // Optional
   key: 'your_key_here', // Optional
   cacheTime: 'number', //Optional - defined in ms for e.g. 60000 = one minute
