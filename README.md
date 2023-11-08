@@ -101,6 +101,10 @@ updateMaintenanceModeStatus(true, {
     maintenanceModeVercelApiToken?: 'your_vercel_api_token_here', // necessary for edge-config provider
   })
 ```
+Example use cases:
+- **Scheduled Updates:** Activate maintenance mode during pre-set times.
+- **High Traffic**: Enable maintenance mode when traffic exceeds server capacity.
+- **System Health**: Trigger maintenance mode in response to health check failures.
 
 ⚠️ Note that if caching is activated, alterations to the maintenance status might not take effect immediately.
 
