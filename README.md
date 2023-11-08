@@ -144,6 +144,12 @@ export default withMaintenanceMode(
     key: process.env.MAINTENANCE_MODE_KEY,
   }
 );
+
+
+export const config = {
+  matcher: ["/((?!api/auth|_next/static|_next/image|favicon.ico).*)"],
+};
+
 ```
 
 ## Error Messages
