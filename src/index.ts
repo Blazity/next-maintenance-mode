@@ -157,7 +157,13 @@ const providerMiddleware = async ({ req, _next, middleware, connectionString, op
 }
 
 const withMaintenanceMode = (
-  { beforeCheck, afterCheck }: { beforeCheck?: NextMiddleware; afterCheck?: NextMiddleware },
+  {
+    beforeCheck,
+    afterCheck,
+  }: {
+    beforeCheck?: ProviderMiddleware['middleware']['beforeCheck']
+    afterCheck?: ProviderMiddleware['middleware']['afterCheck']
+  },
   connectionString: string,
   options: MiddlewareFactoryOptions,
 ) => {
