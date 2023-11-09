@@ -1,6 +1,6 @@
 {
   "name": "next-maintenance-mode",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "description": "The intuitive cost-efficient middleware for effortless maintenance mode toggling. Supported by multiple configuration options and a straightforward API. Ready to integrate with your Next.js app directory!",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

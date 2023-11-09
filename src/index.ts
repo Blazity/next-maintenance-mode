@@ -13,7 +13,10 @@ const MAINTENANCE_KEY_MISSING = 'Maintenance mode key is not found in the specif
 
 type Provider = 'upstash' | 'edge-config'
 
-type MiddlewareType = NextMiddleware | ((request: NextRequest, event: NextFetchEvent) => Promise<any> | any)
+type MiddlewareType =
+  | NextMiddleware
+  | ((request: NextRequest, event: NextFetchEvent) => Promise<any> | any)
+  | ((...args: any) => any)
 
 type MiddlewareFactoryOptions = Readonly<{
   provider: Provider
