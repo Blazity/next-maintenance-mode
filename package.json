@@ -30,7 +30,7 @@
   "dependencies": {
     "@upstash/redis": "^1.22.1",
     "@vercel/edge-config": "^0.2.1",
-    "next": "^13.5.4",
+    "next": "^14.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "typescript-lru-cache": "^2.0.0",
