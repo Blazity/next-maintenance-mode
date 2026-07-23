@@ -17,3 +17,14 @@
 
 ## Prior Sessions
 - None
+
+<!-- human-decisions:start -->
+## Human decisions (from the dashboard)
+
+Recorded automatically from the clarification Q&A. Do not edit or remove.
+
+### Round 1 (answered by Filip Maszota (via Jira), 2026-07-23T09:24:05.035Z)
+1. What exact team motto should `GET /api/motto` return as the `motto` value?
+
+Answer: Filip Maszota: use Ship it fast
+<!-- human-decisions:end -->
